@@ -1,15 +1,27 @@
-name: usd-med-impact-example
+name: economic-news-alert
 enabled: true
+
 match:
   currencies:
     - USD
+    - EUR
+    - GBP
+    - JPY
+    - NZD
+    - AUD
+
   impacts:
+    - red
     - orange
+
   event_names: []
-  event_keywords:
-    - President
+
+  event_keywords: []
+
   weekdays: []
+
 trigger:
   minutes_before: 10
+
 deliver:
-  - webhook_main
+  - discord_main

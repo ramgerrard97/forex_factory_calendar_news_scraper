@@ -2,16 +2,17 @@ months:
   - this
 output_format: both
 output_dir: news
-timezone: Asia/Karachi
+timezone: Asia/Kuala_Lumpur
 allowed_currencies:
-  - CAD
+  - USD
   - EUR
   - GBP
-  - USD
+  - JPY
+  - NZD
+  - AUD
 allowed_impacts:
   - red
   - orange
-  - gray
 headless: true
 schedule_preset: weekly
 viewer_host: 127.0.0.1
@@ -39,7 +40,7 @@ alerts:
 
     - id: webhook_main
       type: webhook
-      enabled: true
+      enabled: false
       url_env: ALERT_WEBHOOK_URL
       auth_header_name: Authorization
       auth_header_env: ALERT_WEBHOOK_AUTH

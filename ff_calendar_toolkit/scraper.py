@@ -1,4 +1,5 @@
 import os
+import re
 import time
 from datetime import datetime, timezone
 
@@ -70,9 +71,43 @@ class ForexFactoryScraper:
         self.console.step("Parsing loaded calendar rows")
         table = driver.find_element(By.CLASS_NAME, "calendar__table")
 
+        page_source = driver.page_source
+
+        event_values = {}
+
+        pattern = re.compile(
+            r'"id":(\d+),.*?"previous":"([^"]*)".*?"forecast":"([^"]*)"',
+            re.DOTALL,
+        )
+
+        for match in pattern.finditer(page_source):
+            event_id = match.group(1)
+            previous = match.group(2)
+            forecast = match.group(3)
+
+            event_values[event_id] = {
+                "previous": previous,
+                "forecast": forecast,
+            }
+
+        print("DEBUG EVENT VALUES FOUND:", len(event_values))
+
+
         for row in table.find_elements(By.TAG_NAME, "tr"):
+
+            if "Manufacturing" in row.get_attribute("innerHTML"):
+                print("DEBUG MANUFACTURING ROW:")
+                print(row.get_attribute("outerHTML"))
+
             row_data = {}
-            event_id = row.get_attribute("data-event-id")
+            event_id = row.get_attribute("data-event-id")            
+     
+            if event_id in event_values:
+                row_data["previous"] = event_values[event_id]["previous"]
+                row_data["forecast"] = event_values[event_id]["forecast"]
+
+            if event_id == "146584":
+                print("DEBUG ISM EVENT ID:", event_id)
 
             for element in row.find_elements(By.TAG_NAME, "td"):
                 class_name = element.get_attribute("class")
@@ -94,7 +129,20 @@ class ForexFactoryScraper:
                 elif element.text:
                     row_data[class_name_key] = element.text
                 else:
-                    row_data[class_name_key] = "empty"
+                    if class_name_key not in row_data:
+                        row_data[class_name_key] = "empty"
+
+                if class_name_key in ("forecast", "previous"):
+                    print(
+                        "DEBUG CELL:",
+                        class_name_key,
+                        "class=",
+                        class_name,
+                        "text=",
+                        repr(element.text),
+                        "html=",
+                        element.get_attribute("outerHTML")[:1000],
+                    )
 
             if row_data:
                 data.append(row_data)
@@ -123,6 +171,19 @@ class ForexFactoryScraper:
         driver = self.init_driver()
         try:
             driver.get(url)
+
+            import time
+            time.sleep(5)
+
+            print("DEBUG PAGE SOURCE HAS 55.0:", "55.0" in driver.page_source)
+            print("DEBUG PAGE SOURCE HAS 54.6:", "54.6" in driver.page_source)
+
+            source = driver.page_source
+
+            index = source.find("55.0")
+
+            print("DEBUG 55.0 LOCATION:")
+            print(source[index - 1000:index + 1000])
             self.console.step("Calendar page loaded, detecting browser timezone")
             source_timezone = driver.execute_script(
                 "return Intl.DateTimeFormat().resolvedOptions().timeZone"

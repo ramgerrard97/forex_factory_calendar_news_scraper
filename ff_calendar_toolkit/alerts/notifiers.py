@@ -25,74 +25,278 @@ class NotifierFactory:
     def connector_ids(self) -> list[str]:
         return sorted(self.connector_map)
 
-    def send_raw(self, connector_id: str, message: str) -> None:
+    def send_raw(self, connector_id: str, message: str) -> str | None:
         connector = self.connector_map.get(connector_id)
+
         if connector is None:
-            raise NotificationError(f"Connector '{connector_id}' is not configured or enabled")
+            raise NotificationError(
+                f"Connector '{connector_id}' is not configured or enabled"
+            )
+
         if connector.connector_type == "discord":
-            self._send_discord(connector, message)
+            return self._send_discord(connector, message)
+
         elif connector.connector_type == "telegram":
             self._send_telegram(connector, message)
+
         elif connector.connector_type == "webhook":
-            url = _required_env(connector.settings.get("url_env"))
+            url = _required_env(
+                connector.settings.get("url_env")
+            )
+
             headers = {}
-            header_name = connector.settings.get("auth_header_name")
-            header_env = connector.settings.get("auth_header_env")
+
+            header_name = connector.settings.get(
+                "auth_header_name"
+            )
+
+            header_env = connector.settings.get(
+                "auth_header_env"
+            )
+
             if header_name and header_env:
-                headers[str(header_name)] = _required_env(header_env)
-            _post_json(url, {"message": message}, headers=headers)
+                headers[str(header_name)] = _required_env(
+                    header_env
+                )
+
+            _post_json(
+                url,
+                {"message": message},
+                headers=headers,
+            )
+
         else:
-            raise NotificationError(f"Unsupported connector type '{connector.connector_type}'")
+            raise NotificationError(
+                f"Unsupported connector type "
+                f"'{connector.connector_type}'"
+            )
 
-    def send(self, connector_id: str, rule: AlertRule, event: AlertEvent) -> None:
+    def send(
+        self,
+        connector_id: str,
+        rule: AlertRule,
+        event: AlertEvent,
+    ) -> None:
+
         connector = self.connector_map.get(connector_id)
-        if connector is None:
-            raise NotificationError(f"Connector '{connector_id}' is not configured or enabled")
 
-        message = render_message(self.options.message_prefix, rule, event)
-        for attempt in range(1, self.options.retry_attempts + 1):
+        if connector is None:
+            raise NotificationError(
+                f"Connector '{connector_id}' is not configured or enabled"
+            )
+
+        message = render_message(
+            self.options.message_prefix,
+            rule,
+            event,
+        )
+
+        for attempt in range(
+            1,
+            self.options.retry_attempts + 1,
+        ):
             try:
-                self._send_once(connector, message, rule, event)
+                self._send_once(
+                    connector,
+                    message,
+                    rule,
+                    event,
+                )
                 return
+
             except NotificationError:
+
                 if attempt == self.options.retry_attempts:
                     raise
-                time.sleep(self.options.retry_backoff_seconds * attempt)
+
+                time.sleep(
+                    self.options.retry_backoff_seconds
+                    * attempt
+                )
 
     def _send_once(
-        self, connector: AlertConnector, message: str, rule: AlertRule, event: AlertEvent
+        self,
+        connector: AlertConnector,
+        message: str,
+        rule: AlertRule,
+        event: AlertEvent,
     ) -> None:
+
         if connector.connector_type == "discord":
-            self._send_discord(connector, message)
+            self._send_discord(
+                connector,
+                message,
+            )
             return
+
         if connector.connector_type == "telegram":
-            self._send_telegram(connector, message)
+            self._send_telegram(
+                connector,
+                message,
+            )
             return
+
         if connector.connector_type == "webhook":
-            self._send_webhook(connector, message, rule, event)
+            self._send_webhook(
+                connector,
+                message,
+                rule,
+                event,
+            )
             return
-        raise NotificationError(f"Unsupported connector type '{connector.connector_type}'")
 
-    def _send_discord(self, connector: AlertConnector, message: str) -> None:
-        webhook_url = _required_env(connector.settings.get("webhook_url_env"))
-        _post_json(webhook_url, {"content": message})
+        raise NotificationError(
+            f"Unsupported connector type "
+            f"'{connector.connector_type}'"
+        )
 
-    def _send_telegram(self, connector: AlertConnector, message: str) -> None:
-        bot_token = _required_env(connector.settings.get("bot_token_env"))
-        chat_id = _required_env(connector.settings.get("chat_id_env"))
-        payload = parse.urlencode({"chat_id": chat_id, "text": message}).encode("utf-8")
-        url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-        _post_form(url, payload)
+    def _send_discord(
+        self,
+        connector: AlertConnector,
+        message: str,
+    ) -> str:
+
+        webhook_url = _required_env(
+            connector.settings.get(
+                "webhook_url_env"
+            )
+        )
+
+        if "?" in webhook_url:
+            webhook_url = (
+                f"{webhook_url}&wait=true"
+            )
+        else:
+            webhook_url = (
+                f"{webhook_url}?wait=true"
+            )
+
+        response = _post_json(
+            webhook_url,
+            {"content": message},
+        )
+
+        if not response:
+            raise NotificationError(
+                "Discord did not return a message ID"
+            )
+
+        try:
+            data = json.loads(response)
+
+        except json.JSONDecodeError as exc:
+            raise NotificationError(
+                "Discord returned an invalid response"
+            ) from exc
+
+        message_id = data.get("id")
+
+        if not message_id:
+            raise NotificationError(
+                "Discord response did not contain a message ID"
+            )
+
+        return str(message_id)
+
+    def edit_discord_message(
+        self,
+        connector_id: str,
+        message_id: str,
+        message: str,
+    ) -> None:
+
+        connector = self.connector_map.get(
+            connector_id
+        )
+
+        if connector is None:
+            raise NotificationError(
+                f"Connector '{connector_id}' is not configured or enabled"
+            )
+
+        if connector.connector_type != "discord":
+            raise NotificationError(
+                f"Connector '{connector_id}' is not a Discord connector"
+            )
+
+        webhook_url = _required_env(
+            connector.settings.get(
+                "webhook_url_env"
+            )
+        )
+
+        edit_url = (
+            f"{webhook_url}/messages/{message_id}"
+        )
+
+        _patch_json(
+            edit_url,
+            {"content": message},
+        )
+
+    def _send_telegram(
+        self,
+        connector: AlertConnector,
+        message: str,
+    ) -> None:
+
+        bot_token = _required_env(
+            connector.settings.get(
+                "bot_token_env"
+            )
+        )
+
+        chat_id = _required_env(
+            connector.settings.get(
+                "chat_id_env"
+            )
+        )
+
+        payload = parse.urlencode(
+            {
+                "chat_id": chat_id,
+                "text": message,
+            }
+        ).encode("utf-8")
+
+        url = (
+            f"https://api.telegram.org/"
+            f"bot{bot_token}/sendMessage"
+        )
+
+        _post_form(
+            url,
+            payload,
+        )
 
     def _send_webhook(
-        self, connector: AlertConnector, message: str, rule: AlertRule, event: AlertEvent
+        self,
+        connector: AlertConnector,
+        message: str,
+        rule: AlertRule,
+        event: AlertEvent,
     ) -> None:
-        url = _required_env(connector.settings.get("url_env"))
+
+        url = _required_env(
+            connector.settings.get(
+                "url_env"
+            )
+        )
+
         headers = {}
-        header_name = connector.settings.get("auth_header_name")
-        header_env = connector.settings.get("auth_header_env")
+
+        header_name = connector.settings.get(
+            "auth_header_name"
+        )
+
+        header_env = connector.settings.get(
+            "auth_header_env"
+        )
+
         if header_name and header_env:
-            headers[str(header_name)] = _required_env(header_env)
+            headers[str(header_name)] = _required_env(
+                header_env
+            )
 
         payload = {
             "message": message,
@@ -103,64 +307,347 @@ class NotifierFactory:
             "event": event.payload,
             "event_time": event.event_time.isoformat(),
         }
-        _post_json(url, payload, headers=headers)
+
+        _post_json(
+            url,
+            payload,
+            headers=headers,
+        )
 
 
-def render_message(prefix: str, rule: AlertRule, event: AlertEvent) -> str:
+def render_message(
+    prefix: str,
+    rule: AlertRule,
+    event: AlertEvent,
+) -> str:
+
     payload = event.payload
-    return (
-        f"{prefix}\n"
-        f"Rule: {rule.name}\n"
-        f"Event: {payload.get('event', '')}\n"
-        f"Currency: {payload.get('currency', '')}\n"
-        f"Impact: {payload.get('impact', '')}\n"
-        f"When: {payload.get('date', '')} {payload.get('time', '')} {payload.get('timezone', '')}\n"
-        f"Detail: {payload.get('detail', '')}"
+
+    currency = payload.get(
+        "currency",
+        "",
     )
+
+    currency_flags = {
+        "USD": "🇺🇸",
+        "EUR": "🇪🇺",
+        "GBP": "🇬🇧",
+        "JPY": "🇯🇵",
+        "NZD": "🇳🇿",
+        "AUD": "🇦🇺",
+    }
+
+    impact = payload.get(
+        "impact",
+        "",
+    )
+
+    impact_icons = {
+        "red": "🔴",
+        "orange": "🟠",
+    }
+
+    flag = currency_flags.get(
+        currency,
+        "",
+    )
+
+    impact_icon = impact_icons.get(
+        impact,
+        "⚪",
+    )
+
+    event_name = payload.get(
+        "event",
+        "",
+    )
+
+    release_time = payload.get(
+        "time",
+        "",
+    )
+
+    forecast = str(
+        payload.get(
+            "forecast",
+            "",
+        )
+    ).strip()
+
+    previous = str(
+        payload.get(
+            "previous",
+            "",
+        )
+    ).strip()
+
+    lines = [
+        "🚨 ECONOMIC NEWS ALERT",
+        "",
+        f"{flag} {currency}",
+        f"{impact_icon} {event_name}",
+        "",
+        f"⏰ Release: {release_time} MYT",
+        "⏳ 10 minutes remaining",
+        "",
+    ]
+
+    if forecast:
+        lines.append(
+            f"Forecast: {forecast}"
+        )
+
+    if previous:
+        lines.append(
+            f"Previous: {previous}"
+        )
+
+    return "\n".join(lines)
 
 
 def _required_env(env_name) -> str:
+
     if not env_name:
-        raise NotificationError("Connector is missing required environment-variable mapping")
-    value = os.getenv(str(env_name))
+        raise NotificationError(
+            "Connector is missing required "
+            "environment-variable mapping"
+        )
+
+    value = os.getenv(
+        str(env_name)
+    )
+
     if not value:
-        raise NotificationError(f"Missing required secret environment variable '{env_name}'")
+        raise NotificationError(
+            "Missing required secret environment "
+            f"variable '{env_name}'"
+        )
+
     return value
 
 
-def _post_json(url: str, payload: dict, headers: dict | None = None) -> None:
-    body = json.dumps(payload).encode("utf-8")
+def _post_json(
+    url: str,
+    payload: dict,
+    headers: dict | None = None,
+) -> str:
+
+    body = json.dumps(
+        payload
+    ).encode("utf-8")
+
     request_headers = {
         "Content-Type": "application/json",
-        "User-Agent": "DiscordBot (https://github.com/fizahkhalid/forex_factory_calendar_news_scraper, 1.0)",
+        "User-Agent": (
+            "DiscordBot "
+            "(https://github.com/fizahkhalid/"
+            "forex_factory_calendar_news_scraper, 1.0)"
+        ),
     }
+
     if headers:
-        request_headers.update(headers)
-    _perform_request(url, body, request_headers)
+        request_headers.update(
+            headers
+        )
+
+    return _perform_request(
+        url,
+        body,
+        request_headers,
+    )
 
 
-def _post_form(url: str, payload: bytes) -> None:
-    _perform_request(url, payload, {"Content-Type": "application/x-www-form-urlencoded"})
+def _patch_json(
+    url: str,
+    payload: dict,
+    headers: dict | None = None,
+) -> str:
+
+    body = json.dumps(
+        payload
+    ).encode("utf-8")
+
+    request_headers = {
+        "Content-Type": "application/json",
+        "User-Agent": (
+            "DiscordBot "
+            "(https://github.com/fizahkhalid/"
+            "forex_factory_calendar_news_scraper, 1.0)"
+        ),
+    }
+
+    if headers:
+        request_headers.update(
+            headers
+        )
+
+    return _perform_patch_request(
+        url,
+        body,
+        request_headers,
+    )
 
 
-def _perform_request(url: str, payload: bytes, headers: dict) -> None:
-    # Mask the URL for logging — keep the domain, hide the token
+def _post_form(
+    url: str,
+    payload: bytes,
+) -> None:
+
+    _perform_request(
+        url,
+        payload,
+        {
+            "Content-Type":
+                "application/x-www-form-urlencoded"
+        },
+    )
+
+
+def _perform_request(
+    url: str,
+    payload: bytes,
+    headers: dict,
+) -> str:
+
     parsed = parse.urlparse(url)
-    safe_url = f"{parsed.scheme}://{parsed.netloc}{parsed.path[:30]}…" if len(parsed.path) > 30 else f"{parsed.scheme}://{parsed.netloc}{parsed.path}"
 
-    req = request.Request(url, data=payload, headers=headers, method="POST")
+    safe_url = (
+        f"{parsed.scheme}://"
+        f"{parsed.netloc}"
+        f"{parsed.path[:30]}…"
+        if len(parsed.path) > 30
+        else
+        f"{parsed.scheme}://"
+        f"{parsed.netloc}"
+        f"{parsed.path}"
+    )
+
+    req = request.Request(
+        url,
+        data=payload,
+        headers=headers,
+        method="POST",
+    )
+
     try:
-        with request.urlopen(req, timeout=10) as response:
-            status = getattr(response, "status", 200)
+
+        with request.urlopen(
+            req,
+            timeout=10,
+        ) as response:
+
+            status = getattr(
+                response,
+                "status",
+                200,
+            )
+
+            response_body = response.read().decode(
+                "utf-8",
+                errors="replace",
+            )
+
             if status >= 400:
-                raise NotificationError(f"HTTP {status} from {safe_url}")
+                raise NotificationError(
+                    f"HTTP {status} from {safe_url}"
+                )
+
+            return response_body
+
     except HTTPError as exc:
+
         try:
-            body = exc.read().decode("utf-8", errors="replace")
+            body = exc.read().decode(
+                "utf-8",
+                errors="replace",
+            )
         except Exception:
             body = "<unreadable>"
+
         raise NotificationError(
-            f"HTTP {exc.code} {exc.reason} from {safe_url} — response body: {body}"
+            f"HTTP {exc.code} {exc.reason} "
+            f"from {safe_url} — "
+            f"response body: {body}"
         ) from exc
+
     except URLError as exc:
-        raise NotificationError(f"Connection error to {safe_url} — {exc.reason}") from exc
+
+        raise NotificationError(
+            f"Connection error to {safe_url} "
+            f"— {exc.reason}"
+        ) from exc
+
+
+def _perform_patch_request(
+    url: str,
+    payload: bytes,
+    headers: dict,
+) -> str:
+
+    parsed = parse.urlparse(url)
+
+    safe_url = (
+        f"{parsed.scheme}://"
+        f"{parsed.netloc}"
+        f"{parsed.path[:30]}…"
+        if len(parsed.path) > 30
+        else
+        f"{parsed.scheme}://"
+        f"{parsed.netloc}"
+        f"{parsed.path}"
+    )
+
+    req = request.Request(
+        url,
+        data=payload,
+        headers=headers,
+        method="PATCH",
+    )
+
+    try:
+
+        with request.urlopen(
+            req,
+            timeout=10,
+        ) as response:
+
+            status = getattr(
+                response,
+                "status",
+                200,
+            )
+
+            response_body = response.read().decode(
+                "utf-8",
+                errors="replace",
+            )
+
+            if status >= 400:
+                raise NotificationError(
+                    f"HTTP {status} from {safe_url}"
+                )
+
+            return response_body
+
+    except HTTPError as exc:
+
+        try:
+            body = exc.read().decode(
+                "utf-8",
+                errors="replace",
+            )
+        except Exception:
+            body = "<unreadable>"
+
+        raise NotificationError(
+            f"HTTP {exc.code} {exc.reason} "
+            f"from {safe_url} — "
+            f"response body: {body}"
+        ) from exc
+
+    except URLError as exc:
+
+        raise NotificationError(
+            f"Connection error to {safe_url} "
+            f"— {exc.reason}"
+        ) from exc
