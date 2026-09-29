@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from ff_calendar_toolkit.config import (
     DEFAULT_ALLOWED_CURRENCY_CODES,
@@ -19,9 +19,16 @@ from .matcher import (
     event_should_trigger,
     preview_match,
 )
-from .notifiers import NotificationError, NotifierFactory
+from .notifiers import (
+    NotificationError,
+    NotifierFactory,
+    render_actual_message,
+)
 from .rules import load_rules
 from .state import AlertStateStore
+
+
+ACTUAL_ALERT_WINDOW_MINUTES = 20
 
 
 class AlertService:
@@ -72,6 +79,7 @@ class AlertService:
             f"and {len(notifier_factory.connector_ids())} enabled connectors"
         )
 
+        actual_alerted = 0
         triggered = 0
         delivered = 0
 
@@ -85,6 +93,112 @@ class AlertService:
             for event in events:
                 if not event_matches_rule(rule, event):
                     continue
+
+                actual = str(
+                    event.payload.get(
+                        "actual",
+                        "",
+                    )
+                ).strip()
+
+                actual_is_valid = (
+                    actual
+                    and actual.lower()
+                    not in {
+                        "empty",
+                        "none",
+                        "null",
+                        "nan",
+                    }
+                )
+
+                event_time_utc = event.event_time.astimezone(
+                    timezone.utc
+                )
+
+                event_age = now - event_time_utc
+
+                actual_is_recent = (
+                    timedelta(0)
+                    <= event_age
+                    <= timedelta(
+                        minutes=ACTUAL_ALERT_WINDOW_MINUTES
+                    )
+                )
+
+                if actual_is_valid and actual_is_recent:
+                    actual_dedup_key = (
+                        f"actual|"
+                        f"{event.payload.get('date', '')}|"
+                        f"{event.payload.get('time', '')}|"
+                        f"{event.payload.get('currency', '')}|"
+                        f"{event.payload.get('event', '')}|"
+                        f"{event.payload.get('impact', '')}"
+                    )
+
+                    for connector_id in rule.deliver:
+                        if state_store.is_sent(
+                            state,
+                            actual_dedup_key,
+                            connector_id,
+                        ):
+                            continue
+
+                        try:
+                            actual_message = render_actual_message(
+                                event
+                            )
+
+                            notifier_factory.send_raw(
+                                connector_id,
+                                actual_message,
+                            )
+
+                            state_store.mark_sent(
+                                state,
+                                actual_dedup_key,
+                                connector_id,
+                                {
+                                    "rule": rule.name,
+                                    "event": event.payload.get(
+                                        "event",
+                                        "",
+                                    ),
+                                    "currency": event.payload.get(
+                                        "currency",
+                                        "",
+                                    ),
+                                    "impact": event.payload.get(
+                                        "impact",
+                                        "",
+                                    ),
+                                    "actual": actual,
+                                    "connector": connector_id,
+                                },
+                            )
+
+                            actual_alerted += 1
+
+                            self.console.success(
+                                f"Sent actual alert for "
+                                f"'{rule.name}' via "
+                                f"{connector_id}: "
+                                f"{event.payload.get('event', '')}"
+                            )
+
+                        except NotificationError as exc:
+                            state_store.mark_failure(
+                                state,
+                                actual_dedup_key,
+                                connector_id,
+                                str(exc),
+                            )
+
+                            self.console.warn(
+                                f"Failed to send actual alert for "
+                                f"'{rule.name}' via "
+                                f"{connector_id}: {exc}"
+                            )
 
                 if not event_should_trigger(
                     rule,
@@ -198,7 +312,8 @@ class AlertService:
 
         self.console.success(
             f"Alert check complete: {triggered} trigger matches "
-            f"evaluated, {delivered} notifications delivered"
+            f"evaluated, {delivered} 10-minute notifications delivered, "
+            f"{actual_alerted} actual notifications delivered"
         )
 
         return 0

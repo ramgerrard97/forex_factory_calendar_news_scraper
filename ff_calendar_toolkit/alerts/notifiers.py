@@ -404,6 +404,103 @@ def render_message(
 
     return "\n".join(lines)
 
+def render_actual_message(
+    event: AlertEvent,
+) -> str:
+
+    payload = event.payload
+
+    currency = payload.get(
+        "currency",
+        "",
+    )
+
+    currency_flags = {
+        "USD": "🇺🇸",
+        "EUR": "🇪🇺",
+        "GBP": "🇬🇧",
+        "JPY": "🇯🇵",
+        "NZD": "🇳🇿",
+        "AUD": "🇦🇺",
+    }
+
+    impact = payload.get(
+        "impact",
+        "",
+    )
+
+    impact_icons = {
+        "red": "🔴",
+        "orange": "🟠",
+    }
+
+    flag = currency_flags.get(
+        currency,
+        "",
+    )
+
+    impact_icon = impact_icons.get(
+        impact,
+        "⚪",
+    )
+
+    event_name = payload.get(
+        "event",
+        "",
+    )
+
+    release_time = payload.get(
+        "time",
+        "",
+    )
+
+    actual = str(
+        payload.get(
+            "actual",
+            "",
+        )
+    ).strip()
+
+    forecast = str(
+        payload.get(
+            "forecast",
+            "",
+        )
+    ).strip()
+
+    previous = str(
+        payload.get(
+            "previous",
+            "",
+        )
+    ).strip()
+
+    lines = [
+        "📊 ACTUAL ECONOMIC DATA",
+        "",
+        f"{flag} {currency}",
+        f"{impact_icon} {event_name}",
+        "",
+        f"⏰ Release: {release_time} MYT",
+        "",
+    ]
+
+    if actual:
+        lines.append(
+            f"Actual: {actual}"
+        )
+
+    if forecast:
+        lines.append(
+            f"Forecast: {forecast}"
+        )
+
+    if previous:
+        lines.append(
+            f"Previous: {previous}"
+        )
+
+    return "\n".join(lines)
 
 def _required_env(env_name) -> str:
 

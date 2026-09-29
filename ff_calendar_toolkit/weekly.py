@@ -18,13 +18,20 @@ class WeeklyCalendarService:
 
     def get_week_dates(self) -> tuple[date, date]:
         today = self.malaysia_now().date()
+        weekday = today.weekday()
 
-        days_until_monday = (7 - today.weekday()) % 7
+        if weekday == 6:
+            # Sunday → upcoming Monday to Friday
+            monday = today + timedelta(days=1)
 
-        if days_until_monday == 0:
-            days_until_monday = 7
+        elif weekday == 5:
+            # Saturday → upcoming Monday to Friday
+            monday = today + timedelta(days=2)
 
-        monday = today + timedelta(days=days_until_monday)
+        else:
+            # Monday to Friday → current Monday to Friday
+            monday = today - timedelta(days=weekday)
+
         friday = monday + timedelta(days=4)
 
         return monday, friday

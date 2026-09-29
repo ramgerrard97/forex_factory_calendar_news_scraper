@@ -9,4 +9,12 @@ env/
 .conda-env/
 .codex
 news/
-state/
+
+# Runtime state
+state/*
+!state/alerts/
+!state/alerts/alert_state.json
+!state/weekly_calendar.json
+
+# Local backups
+*.backup

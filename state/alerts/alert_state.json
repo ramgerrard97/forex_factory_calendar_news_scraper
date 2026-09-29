@@ -1,0 +1,578 @@
+{
+  "sent": {
+    "economic-news-alert|29/09/2026|16:00|EUR|ECB President Lagarde Speaks|orange|2026-09-29T06:00:00+05:00": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "ECB President Lagarde Speaks",
+        "currency": "EUR",
+        "impact": "orange",
+        "trigger_at": "2026-09-29T06:00:00+05:00",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T02:47:22.264315+00:00"
+    },
+    "actual|01/09/2026|14:00|EUR|Core CPI Flash Estimate y/y|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Core CPI Flash Estimate y/y",
+        "currency": "EUR",
+        "impact": "orange",
+        "actual": "2.4%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:30.394864+00:00"
+    },
+    "actual|01/09/2026|14:00|EUR|CPI Flash Estimate y/y|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "CPI Flash Estimate y/y",
+        "currency": "EUR",
+        "impact": "orange",
+        "actual": "3.3%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:30.832729+00:00"
+    },
+    "actual|01/09/2026|19:00|USD|ISM Manufacturing PMI|red": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "ISM Manufacturing PMI",
+        "currency": "USD",
+        "impact": "red",
+        "actual": "54.6",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:31.325612+00:00"
+    },
+    "actual|01/09/2026|19:00|USD|ISM Manufacturing Prices|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "ISM Manufacturing Prices",
+        "currency": "USD",
+        "impact": "orange",
+        "actual": "71.1",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:31.702135+00:00"
+    },
+    "actual|01/09/2026|19:00|USD|JOLTS Job Openings|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "JOLTS Job Openings",
+        "currency": "USD",
+        "impact": "orange",
+        "actual": "7.27M",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:32.749278+00:00"
+    },
+    "actual|02/09/2026|17:15|USD|ADP Non-Farm Employment Change|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "ADP Non-Farm Employment Change",
+        "currency": "USD",
+        "impact": "orange",
+        "actual": "38K",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:33.154938+00:00"
+    },
+    "actual|03/09/2026|17:30|USD|Unemployment Claims|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Unemployment Claims",
+        "currency": "USD",
+        "impact": "orange",
+        "actual": "206K",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:33.512907+00:00"
+    },
+    "actual|03/09/2026|19:00|USD|ISM Services PMI|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "ISM Services PMI",
+        "currency": "USD",
+        "impact": "orange",
+        "actual": "55.4",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:33.923334+00:00"
+    },
+    "actual|04/09/2026|17:30|USD|Average Hourly Earnings m/m|red": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Average Hourly Earnings m/m",
+        "currency": "USD",
+        "impact": "red",
+        "actual": "0.3%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:34.410204+00:00"
+    },
+    "actual|04/09/2026|17:30|USD|Non-Farm Employment Change|red": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Non-Farm Employment Change",
+        "currency": "USD",
+        "impact": "red",
+        "actual": "162K",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:34.782556+00:00"
+    },
+    "actual|04/09/2026|17:30|USD|Unemployment Rate|red": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Unemployment Rate",
+        "currency": "USD",
+        "impact": "red",
+        "actual": "4.1%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:35.134796+00:00"
+    },
+    "actual|10/09/2026|17:15|EUR|Main Refinancing Rate|red": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Main Refinancing Rate",
+        "currency": "EUR",
+        "impact": "red",
+        "actual": "2.65%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:35.490984+00:00"
+    },
+    "actual|10/09/2026|17:30|USD|Core PPI m/m|red": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Core PPI m/m",
+        "currency": "USD",
+        "impact": "red",
+        "actual": "0.2%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:35.831507+00:00"
+    },
+    "actual|10/09/2026|17:30|USD|PPI m/m|red": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "PPI m/m",
+        "currency": "USD",
+        "impact": "red",
+        "actual": "0.4%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:36.216686+00:00"
+    },
+    "actual|10/09/2026|17:30|USD|Unemployment Claims|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Unemployment Claims",
+        "currency": "USD",
+        "impact": "orange",
+        "actual": "206K",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:36.567091+00:00"
+    },
+    "actual|11/09/2026|11:00|GBP|GDP m/m|red": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "GDP m/m",
+        "currency": "GBP",
+        "impact": "red",
+        "actual": "0.4%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:36.970365+00:00"
+    },
+    "actual|11/09/2026|17:30|USD|Core CPI m/m|red": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Core CPI m/m",
+        "currency": "USD",
+        "impact": "red",
+        "actual": "0.3%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:37.337150+00:00"
+    },
+    "actual|11/09/2026|17:30|USD|Core CPI y/y|red": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Core CPI y/y",
+        "currency": "USD",
+        "impact": "red",
+        "actual": "2.4%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:38.154173+00:00"
+    },
+    "actual|11/09/2026|17:30|USD|CPI m/m|red": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "CPI m/m",
+        "currency": "USD",
+        "impact": "red",
+        "actual": "0.4%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:39.165330+00:00"
+    },
+    "actual|11/09/2026|17:30|USD|CPI y/y|red": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "CPI y/y",
+        "currency": "USD",
+        "impact": "red",
+        "actual": "3.4%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:40.150860+00:00"
+    },
+    "actual|11/09/2026|19:00|USD|Prelim UoM Consumer Sentiment|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Prelim UoM Consumer Sentiment",
+        "currency": "USD",
+        "impact": "orange",
+        "actual": "47.8",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:40.517731+00:00"
+    },
+    "actual|11/09/2026|19:00|USD|Prelim UoM Inflation Expectations|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Prelim UoM Inflation Expectations",
+        "currency": "USD",
+        "impact": "orange",
+        "actual": "4.6%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:40.887133+00:00"
+    },
+    "actual|15/09/2026|11:00|GBP|Claimant Count Change|red": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Claimant Count Change",
+        "currency": "GBP",
+        "impact": "red",
+        "actual": "27.8K",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:41.275128+00:00"
+    },
+    "actual|15/09/2026|11:00|GBP|Average Earnings Index 3m/y|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Average Earnings Index 3m/y",
+        "currency": "GBP",
+        "impact": "orange",
+        "actual": "3.9%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:41.650661+00:00"
+    },
+    "actual|16/09/2026|11:00|GBP|CPI y/y|red": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "CPI y/y",
+        "currency": "GBP",
+        "impact": "red",
+        "actual": "3.1%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:42.291862+00:00"
+    },
+    "actual|16/09/2026|17:30|USD|Core Retail Sales m/m|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Core Retail Sales m/m",
+        "currency": "USD",
+        "impact": "orange",
+        "actual": "1.4%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:42.751381+00:00"
+    },
+    "actual|16/09/2026|17:30|USD|Retail Sales m/m|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Retail Sales m/m",
+        "currency": "USD",
+        "impact": "orange",
+        "actual": "1.2%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:43.098827+00:00"
+    },
+    "actual|16/09/2026|23:00|USD|Federal Funds Rate|red": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Federal Funds Rate",
+        "currency": "USD",
+        "impact": "red",
+        "actual": "4.00%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:43.475762+00:00"
+    },
+    "actual|17/09/2026|16:00|GBP|MPC Official Bank Rate Votes|red": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "MPC Official Bank Rate Votes",
+        "currency": "GBP",
+        "impact": "red",
+        "actual": "3-0-6",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:43.807949+00:00"
+    },
+    "actual|17/09/2026|16:00|GBP|Official Bank Rate|red": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Official Bank Rate",
+        "currency": "GBP",
+        "impact": "red",
+        "actual": "3.75%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:44.173703+00:00"
+    },
+    "actual|17/09/2026|17:30|USD|Philly Fed Manufacturing Index|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Philly Fed Manufacturing Index",
+        "currency": "USD",
+        "impact": "orange",
+        "actual": "37.8",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:44.543397+00:00"
+    },
+    "actual|17/09/2026|17:30|USD|Unemployment Claims|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Unemployment Claims",
+        "currency": "USD",
+        "impact": "orange",
+        "actual": "196K",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:44.969088+00:00"
+    },
+    "actual|18/09/2026|11:00|GBP|Retail Sales m/m|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Retail Sales m/m",
+        "currency": "GBP",
+        "impact": "orange",
+        "actual": "0.5%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:45.414400+00:00"
+    },
+    "actual|23/09/2026|12:15|EUR|French Flash Manufacturing PMI|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "French Flash Manufacturing PMI",
+        "currency": "EUR",
+        "impact": "orange",
+        "actual": "50.3",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:45.810524+00:00"
+    },
+    "actual|23/09/2026|12:15|EUR|French Flash Services PMI|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "French Flash Services PMI",
+        "currency": "EUR",
+        "impact": "orange",
+        "actual": "51.4",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:46.156738+00:00"
+    },
+    "actual|23/09/2026|12:30|EUR|German Flash Manufacturing PMI|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "German Flash Manufacturing PMI",
+        "currency": "EUR",
+        "impact": "orange",
+        "actual": "53.8",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:46.542428+00:00"
+    },
+    "actual|23/09/2026|12:30|EUR|German Flash Services PMI|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "German Flash Services PMI",
+        "currency": "EUR",
+        "impact": "orange",
+        "actual": "52.9",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:47.019712+00:00"
+    },
+    "actual|23/09/2026|13:30|GBP|Flash Manufacturing PMI|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Flash Manufacturing PMI",
+        "currency": "GBP",
+        "impact": "orange",
+        "actual": "52.0",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:47.437557+00:00"
+    },
+    "actual|24/09/2026|17:30|USD|Unemployment Claims|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Unemployment Claims",
+        "currency": "USD",
+        "impact": "orange",
+        "actual": "197K",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-29T05:08:48.403632+00:00"
+    }
+  },
+  "failures": {
+    "actual|23/09/2026|13:30|GBP|Flash Services PMI|orange|discord_main": {
+      "error": "HTTP 429 Too Many Requests from https://discord.com/api/webhooks/1554068620181635\u2026 \u2014 response body: {\"message\": \"The resource is being rate limited.\", \"retry_after\": 0.57, \"global\": false}",
+      "updated_at": "2026-09-29T05:08:47.785108+00:00"
+    },
+    "actual|25/09/2026|19:00|USD|Revised UoM Consumer Sentiment|orange|discord_main": {
+      "error": "HTTP 429 Too Many Requests from https://discord.com/api/webhooks/1554068620181635\u2026 \u2014 response body: {\"message\": \"The resource is being rate limited.\", \"retry_after\": 1.621, \"global\": false}",
+      "updated_at": "2026-09-29T05:08:48.743582+00:00"
+    },
+    "actual|25/09/2026|19:00|USD|Revised UoM Inflation Expectations|orange|discord_main": {
+      "error": "HTTP 429 Too Many Requests from https://discord.com/api/webhooks/1554068620181635\u2026 \u2014 response body: {\"message\": \"The resource is being rate limited.\", \"retry_after\": 1.256, \"global\": false}",
+      "updated_at": "2026-09-29T05:08:49.109451+00:00"
+    }
+  }
+}
