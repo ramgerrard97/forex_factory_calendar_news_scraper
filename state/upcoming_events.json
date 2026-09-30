@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-09-30T04:16:12.819377+00:00",
+  "generated_at": "2026-09-30T10:36:45.192201+00:00",
   "week_start": "2026-09-28",
   "week_end": "2026-10-02",
   "events": [
     {
-      "time": "16:30",
+      "time": "15:30",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "EUR",
       "impact": "orange",
@@ -15,10 +15,10 @@
       "previous": "",
       "day": "Mon",
       "date": "28/09/2026",
-      "scraped_at": "2026-09-30T04:14:11.996153+00:00"
+      "scraped_at": "2026-09-30T10:34:42.341084+00:00"
     },
     {
-      "time": "07:30",
+      "time": "06:30",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "AUD",
       "impact": "red",
@@ -29,10 +29,10 @@
       "previous": "4.35%",
       "day": "Tue",
       "date": "29/09/2026",
-      "scraped_at": "2026-09-30T04:14:11.996153+00:00"
+      "scraped_at": "2026-09-30T10:34:42.341084+00:00"
     },
     {
-      "time": "07:30",
+      "time": "06:30",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "AUD",
       "impact": "red",
@@ -43,10 +43,10 @@
       "previous": "",
       "day": "Tue",
       "date": "29/09/2026",
-      "scraped_at": "2026-09-30T04:14:11.996153+00:00"
+      "scraped_at": "2026-09-30T10:34:42.341084+00:00"
     },
     {
-      "time": "08:30",
+      "time": "07:30",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "AUD",
       "impact": "orange",
@@ -57,10 +57,10 @@
       "previous": "",
       "day": "Tue",
       "date": "29/09/2026",
-      "scraped_at": "2026-09-30T04:14:11.996153+00:00"
+      "scraped_at": "2026-09-30T10:34:42.341084+00:00"
     },
     {
-      "time": "14:00",
+      "time": "13:00",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "EUR",
       "impact": "orange",
@@ -71,10 +71,10 @@
       "previous": "",
       "day": "Tue",
       "date": "29/09/2026",
-      "scraped_at": "2026-09-30T04:14:11.996153+00:00"
+      "scraped_at": "2026-09-30T10:34:42.341084+00:00"
     },
     {
-      "time": "17:00",
+      "time": "16:00",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "USD",
       "impact": "orange",
@@ -85,10 +85,10 @@
       "previous": "89.4",
       "day": "Tue",
       "date": "29/09/2026",
-      "scraped_at": "2026-09-30T04:14:11.996153+00:00"
+      "scraped_at": "2026-09-30T10:34:42.341084+00:00"
     },
     {
-      "time": "17:00",
+      "time": "16:00",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "USD",
       "impact": "orange",
@@ -99,10 +99,10 @@
       "previous": "7.27M",
       "day": "Tue",
       "date": "29/09/2026",
-      "scraped_at": "2026-09-30T04:14:11.996153+00:00"
+      "scraped_at": "2026-09-30T10:34:42.341084+00:00"
     },
     {
-      "time": "04:30",
+      "time": "03:30",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "AUD",
       "impact": "red",
@@ -113,10 +113,10 @@
       "previous": "1.0%",
       "day": "Wed",
       "date": "30/09/2026",
-      "scraped_at": "2026-09-30T04:14:11.996153+00:00"
+      "scraped_at": "2026-09-30T10:34:42.341084+00:00"
     },
     {
-      "time": "04:30",
+      "time": "03:30",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "AUD",
       "impact": "red",
@@ -127,10 +127,10 @@
       "previous": "3.5%",
       "day": "Wed",
       "date": "30/09/2026",
-      "scraped_at": "2026-09-30T04:14:11.996153+00:00"
+      "scraped_at": "2026-09-30T10:34:42.341084+00:00"
     },
     {
-      "time": "04:30",
+      "time": "03:30",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "AUD",
       "impact": "red",
@@ -141,10 +141,10 @@
       "previous": "0.5%",
       "day": "Wed",
       "date": "30/09/2026",
-      "scraped_at": "2026-09-30T04:14:11.996153+00:00"
+      "scraped_at": "2026-09-30T10:34:42.341084+00:00"
     },
     {
-      "time": "15:15",
+      "time": "14:15",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "USD",
       "impact": "orange",
@@ -155,10 +155,10 @@
       "previous": "38K",
       "day": "Wed",
       "date": "30/09/2026",
-      "scraped_at": "2026-09-30T04:14:11.996153+00:00"
+      "scraped_at": "2026-09-30T10:34:42.341084+00:00"
     },
     {
-      "time": "15:30",
+      "time": "14:30",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "USD",
       "impact": "red",
@@ -169,10 +169,10 @@
       "previous": "0.2%",
       "day": "Wed",
       "date": "30/09/2026",
-      "scraped_at": "2026-09-30T04:14:11.996153+00:00"
+      "scraped_at": "2026-09-30T10:34:42.341084+00:00"
     },
     {
-      "time": "15:30",
+      "time": "14:30",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "USD",
       "impact": "red",
@@ -183,10 +183,10 @@
       "previous": "1.5%",
       "day": "Wed",
       "date": "30/09/2026",
-      "scraped_at": "2026-09-30T04:14:11.996153+00:00"
+      "scraped_at": "2026-09-30T10:34:42.341084+00:00"
     },
     {
-      "time": "15:30",
+      "time": "14:30",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "USD",
       "impact": "orange",
@@ -197,10 +197,10 @@
       "previous": "6.4%",
       "day": "Wed",
       "date": "30/09/2026",
-      "scraped_at": "2026-09-30T04:14:11.996153+00:00"
+      "scraped_at": "2026-09-30T10:34:42.341084+00:00"
     },
     {
-      "time": "22:30",
+      "time": "21:30",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "USD",
       "impact": "orange",
@@ -211,7 +211,7 @@
       "previous": "",
       "day": "Wed",
       "date": "30/09/2026",
-      "scraped_at": "2026-09-30T04:14:11.996153+00:00"
+      "scraped_at": "2026-09-30T10:34:42.341084+00:00"
     },
     {
       "time": "All Day",
@@ -225,10 +225,24 @@
       "previous": "0.2%",
       "day": "Wed",
       "date": "30/09/2026",
-      "scraped_at": "2026-09-30T04:14:11.996153+00:00"
+      "scraped_at": "2026-09-30T10:34:42.341084+00:00"
     },
     {
-      "time": "11:00",
+      "time": "00:00",
+      "timezone": "Asia/Kuala_Lumpur",
+      "currency": "USD",
+      "impact": "orange",
+      "event": "FOMC Member Kashkari Speaks",
+      "detail": "https://www.forexfactory.com/calendar?month=September#detail=153796",
+      "actual": "",
+      "forecast": "",
+      "previous": "",
+      "day": "Thu",
+      "date": "01/10/2026",
+      "scraped_at": "2026-09-30T10:34:42.341084+00:00"
+    },
+    {
+      "time": "10:00",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "GBP",
       "impact": "orange",
@@ -239,10 +253,10 @@
       "previous": "",
       "day": "Thu",
       "date": "01/10/2026",
-      "scraped_at": "2026-09-30T04:16:12.699394+00:00"
+      "scraped_at": "2026-09-30T10:36:45.066588+00:00"
     },
     {
-      "time": "15:30",
+      "time": "14:30",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "USD",
       "impact": "orange",
@@ -253,10 +267,10 @@
       "previous": "197K",
       "day": "Thu",
       "date": "01/10/2026",
-      "scraped_at": "2026-09-30T04:16:12.699394+00:00"
+      "scraped_at": "2026-09-30T10:36:45.066588+00:00"
     },
     {
-      "time": "16:30",
+      "time": "15:30",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "EUR",
       "impact": "orange",
@@ -267,10 +281,10 @@
       "previous": "",
       "day": "Thu",
       "date": "01/10/2026",
-      "scraped_at": "2026-09-30T04:16:12.699394+00:00"
+      "scraped_at": "2026-09-30T10:36:45.066588+00:00"
     },
     {
-      "time": "17:00",
+      "time": "16:00",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "USD",
       "impact": "orange",
@@ -281,10 +295,10 @@
       "previous": "",
       "day": "Thu",
       "date": "01/10/2026",
-      "scraped_at": "2026-09-30T04:16:12.699394+00:00"
+      "scraped_at": "2026-09-30T10:36:45.066588+00:00"
     },
     {
-      "time": "17:00",
+      "time": "16:00",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "USD",
       "impact": "orange",
@@ -295,10 +309,10 @@
       "previous": "54.6",
       "day": "Thu",
       "date": "01/10/2026",
-      "scraped_at": "2026-09-30T04:16:12.699394+00:00"
+      "scraped_at": "2026-09-30T10:36:45.066588+00:00"
     },
     {
-      "time": "02:30",
+      "time": "01:30",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "JPY",
       "impact": "orange",
@@ -309,10 +323,10 @@
       "previous": "1.8%",
       "day": "Fri",
       "date": "02/10/2026",
-      "scraped_at": "2026-09-30T04:16:12.699394+00:00"
+      "scraped_at": "2026-09-30T10:36:45.066588+00:00"
     },
     {
-      "time": "12:00",
+      "time": "11:00",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "EUR",
       "impact": "orange",
@@ -323,10 +337,10 @@
       "previous": "2.4%",
       "day": "Fri",
       "date": "02/10/2026",
-      "scraped_at": "2026-09-30T04:16:12.699394+00:00"
+      "scraped_at": "2026-09-30T10:36:45.066588+00:00"
     },
     {
-      "time": "12:00",
+      "time": "11:00",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "EUR",
       "impact": "orange",
@@ -337,10 +351,10 @@
       "previous": "3.3%",
       "day": "Fri",
       "date": "02/10/2026",
-      "scraped_at": "2026-09-30T04:16:12.699394+00:00"
+      "scraped_at": "2026-09-30T10:36:45.066588+00:00"
     },
     {
-      "time": "15:30",
+      "time": "14:30",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "USD",
       "impact": "red",
@@ -351,10 +365,10 @@
       "previous": "0.3%",
       "day": "Fri",
       "date": "02/10/2026",
-      "scraped_at": "2026-09-30T04:16:12.699394+00:00"
+      "scraped_at": "2026-09-30T10:36:45.066588+00:00"
     },
     {
-      "time": "15:30",
+      "time": "14:30",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "USD",
       "impact": "red",
@@ -365,10 +379,10 @@
       "previous": "162K",
       "day": "Fri",
       "date": "02/10/2026",
-      "scraped_at": "2026-09-30T04:16:12.699394+00:00"
+      "scraped_at": "2026-09-30T10:36:45.066588+00:00"
     },
     {
-      "time": "15:30",
+      "time": "14:30",
       "timezone": "Asia/Kuala_Lumpur",
       "currency": "USD",
       "impact": "red",
@@ -379,7 +393,7 @@
       "previous": "4.1%",
       "day": "Fri",
       "date": "02/10/2026",
-      "scraped_at": "2026-09-30T04:16:12.699394+00:00"
+      "scraped_at": "2026-09-30T10:36:45.066588+00:00"
     }
   ]
 }
