@@ -1,4 +1,6 @@
 from datetime import date, datetime, timedelta
+import json
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from .console import AppConsole
@@ -8,29 +10,40 @@ from .scraper import ForexFactoryScraper
 
 MALAYSIA_TIMEZONE = ZoneInfo("Asia/Kuala_Lumpur")
 
+# Discord allows up to 2000 characters.
+# Keep a little safety margin.
+DISCORD_SAFE_LIMIT = 1900
+
 
 class WeeklyCalendarService:
-    def __init__(self, console: AppConsole | None = None) -> None:
+    def __init__(
+        self,
+        console: AppConsole | None = None,
+    ) -> None:
         self.console = console or AppConsole()
 
     def malaysia_now(self) -> datetime:
         return datetime.now(MALAYSIA_TIMEZONE)
 
-    def get_week_dates(self) -> tuple[date, date]:
+    def get_week_dates(
+        self,
+    ) -> tuple[date, date]:
         today = self.malaysia_now().date()
         weekday = today.weekday()
 
         if weekday == 6:
-            # Sunday → upcoming Monday to Friday
+            # Sunday -> upcoming Monday
             monday = today + timedelta(days=1)
 
         elif weekday == 5:
-            # Saturday → upcoming Monday to Friday
+            # Saturday -> upcoming Monday
             monday = today + timedelta(days=2)
 
         else:
-            # Monday to Friday → current Monday to Friday
-            monday = today - timedelta(days=weekday)
+            # Monday-Friday -> current week's Monday
+            monday = today - timedelta(
+                days=weekday
+            )
 
         friday = monday + timedelta(days=4)
 
@@ -41,25 +54,24 @@ class WeeklyCalendarService:
         monday: date,
         friday: date,
     ) -> list[str]:
-        selectors = []
+        today = self.malaysia_now().date()
 
-        if monday.month == friday.month:
-            today = self.malaysia_now().date()
-
+        # Entire week is inside one month.
+        if (
+            monday.month == friday.month
+            and monday.year == friday.year
+        ):
             if (
                 monday.month == today.month
                 and monday.year == today.year
             ):
-                selectors.append("this")
-            else:
-                selectors.append("next")
+                return ["this"]
 
-            return selectors
+            return ["next"]
 
-        selectors.append("this")
-        selectors.append("next")
-
-        return selectors
+        # Week crosses from current month
+        # into the following month.
+        return ["this", "next"]
 
     def scrape_week(
         self,
@@ -75,21 +87,25 @@ class WeeklyCalendarService:
             headless=True,
         )
 
-        weekly_records = []
+        weekly_records: list[dict] = []
 
         for month in month_selectors:
             self.console.step(
                 f"Scraping month selector '{month}'"
             )
 
-            raw_rows, context = scraper.scrape_month(
-                month,
-                target_timezone,
+            raw_rows, context = (
+                scraper.scrape_month(
+                    month,
+                    target_timezone,
+                )
             )
 
             self.console.step(
-                f"Normalizing {len(raw_rows)} raw rows for "
-                f"{context.month_name} {context.year}"
+                f"Normalizing {len(raw_rows)} "
+                f"raw rows for "
+                f"{context.month_name} "
+                f"{context.year}"
             )
 
             records = normalize_rows(
@@ -108,11 +124,22 @@ class WeeklyCalendarService:
                         record["date"],
                         "%d/%m/%Y",
                     ).date()
-                except (ValueError, TypeError):
+
+                except (
+                    ValueError,
+                    TypeError,
+                    KeyError,
+                ):
                     continue
 
-                if monday <= event_date <= friday:
-                    weekly_records.append(record)
+                if (
+                    monday
+                    <= event_date
+                    <= friday
+                ):
+                    weekly_records.append(
+                        record
+                    )
 
         weekly_records.sort(
             key=lambda record: (
@@ -120,7 +147,10 @@ class WeeklyCalendarService:
                     record["date"],
                     "%d/%m/%Y",
                 ),
-                record.get("time", ""),
+                record.get(
+                    "time",
+                    "",
+                ),
             )
         )
 
@@ -132,15 +162,6 @@ class WeeklyCalendarService:
         monday: date,
         friday: date,
     ) -> str:
-        lines = [
-            "📅 WEEKLY ECONOMIC CALENDAR",
-            f"{monday.strftime('%d %b')} – "
-            f"{friday.strftime('%d %b %Y')}",
-            "",
-        ]
-
-        current_date = None
-
         currency_flags = {
             "USD": "🇺🇸",
             "EUR": "🇪🇺",
@@ -155,11 +176,31 @@ class WeeklyCalendarService:
             "orange": "🟠",
         }
 
+        lines = [
+            (
+                "📅 **WEEKLY ECONOMIC CALENDAR**"
+            ),
+            (
+                f"{monday.strftime('%d %b')} – "
+                f"{friday.strftime('%d %b %Y')}"
+            ),
+        ]
+
+        current_date = None
+
         for record in records:
-            event_date = datetime.strptime(
-                record["date"],
-                "%d/%m/%Y",
-            ).date()
+            try:
+                event_date = datetime.strptime(
+                    record["date"],
+                    "%d/%m/%Y",
+                ).date()
+
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+            ):
+                continue
 
             if event_date != current_date:
                 current_date = event_date
@@ -167,61 +208,172 @@ class WeeklyCalendarService:
                 lines.extend(
                     [
                         "",
-                        f"{event_date.strftime('%A').upper()}",
-                        "",
+                        (
+                            f"**"
+                            f"{event_date.strftime('%A').upper()}"
+                            f"**"
+                        ),
                     ]
                 )
 
-            currency = record.get("currency", "")
-            flag = currency_flags.get(currency, "")
+            currency = str(
+                record.get(
+                    "currency",
+                    "",
+                )
+            ).strip()
+
+            flag = currency_flags.get(
+                currency,
+                "",
+            )
 
             impact = impact_icons.get(
-                record.get("impact", ""),
+                str(
+                    record.get(
+                        "impact",
+                        "",
+                    )
+                ).strip(),
                 "⚪",
             )
 
-            lines.append(
-                f"{record.get('time', '')} MYT — "
-                f"{flag} {currency} — "
-                f"{record.get('event', '')} {impact}"
-            )
+            event_name = str(
+                record.get(
+                    "event",
+                    "",
+                )
+            ).strip()
 
-            actual = record.get("actual", "").strip()
-            forecast = record.get("forecast", "").strip()
-            previous = record.get("previous", "").strip()
+            event_time = str(
+                record.get(
+                    "time",
+                    "",
+                )
+            ).strip()
+
+            actual = str(
+                record.get(
+                    "actual",
+                    "",
+                )
+                or ""
+            ).strip()
+
+            forecast = str(
+                record.get(
+                    "forecast",
+                    "",
+                )
+                or ""
+            ).strip()
+
+            previous = str(
+                record.get(
+                    "previous",
+                    "",
+                )
+                or ""
+            ).strip()
+
+            values: list[str] = []
 
             if actual:
-                lines.append(
-                    f"   Actual: {actual}"
+                values.append(
+                    f"A:{actual}"
                 )
 
             if forecast:
-                lines.append(
-                    f"   Forecast: {forecast}"
+                values.append(
+                    f"F:{forecast}"
                 )
 
             if previous:
-                lines.append(
-                    f"   Previous: {previous}"
+                values.append(
+                    f"P:{previous}"
                 )
 
-        if not records:
-            lines.append(
-                "No high or medium impact events found."
+            event_line = (
+                f"{event_time} MYT — "
+                f"{flag} {currency} "
+                f"{impact} "
+                f"{event_name}"
             )
 
-        return "\n".join(lines)
+            if values:
+                event_line += (
+                    " | "
+                    + " · ".join(values)
+                )
+
+            lines.append(event_line)
+
+        if not records:
+            lines.extend(
+                [
+                    "",
+                    (
+                        "No high or medium impact "
+                        "events found."
+                    ),
+                ]
+            )
+
+        message = "\n".join(lines)
+
+        if (
+            len(message)
+            <= DISCORD_SAFE_LIMIT
+        ):
+            return message
+
+        # Never allow a Discord 2000-character
+        # error to break the alert checker.
+        warning = (
+            "\n\n⚠️ More events exist this week, "
+            "but the calendar was shortened to "
+            "fit Discord's message limit."
+        )
+
+        available_length = (
+            DISCORD_SAFE_LIMIT
+            - len(warning)
+        )
+
+        safe_lines: list[str] = []
+
+        for line in lines:
+            candidate = "\n".join(
+                safe_lines + [line]
+            )
+
+            if (
+                len(candidate)
+                > available_length
+            ):
+                break
+
+            safe_lines.append(line)
+
+        return (
+            "\n".join(
+                safe_lines
+            ).rstrip()
+            + warning
+        )
 
     def send_to_discord(
         self,
         message: str,
         alert_options,
     ) -> None:
-        from .alerts.notifiers import NotifierFactory
-        import json
-        from pathlib import Path
+        from .alerts.notifiers import (
+            NotifierFactory,
+        )
 
-        notifier = NotifierFactory(alert_options)
+        notifier = NotifierFactory(
+            alert_options
+        )
 
         message_id = notifier.send_raw(
             "discord_main",
@@ -229,18 +381,23 @@ class WeeklyCalendarService:
         )
 
         state_dir = Path("state")
+
         state_dir.mkdir(
             parents=True,
             exist_ok=True,
         )
 
         state_file = (
-            state_dir / "weekly_calendar.json"
+            state_dir
+            / "weekly_calendar.json"
         )
 
         state_data = {
             "message_id": message_id,
-            "updated_at": self.malaysia_now().isoformat(),
+            "updated_at": (
+                self.malaysia_now()
+                .isoformat()
+            ),
         }
 
         state_file.write_text(
@@ -252,7 +409,8 @@ class WeeklyCalendarService:
         )
 
         self.console.success(
-            f"Weekly calendar sent to Discord. "
+            "Weekly calendar sent to "
+            "Discord. "
             f"Message ID: {message_id}"
         )
 
@@ -261,38 +419,53 @@ class WeeklyCalendarService:
         message: str,
         alert_options,
     ) -> None:
-        import json
-        from pathlib import Path
+        from .alerts.notifiers import (
+            NotifierFactory,
+        )
 
         state_file = (
-            Path("state") / "weekly_calendar.json"
+            Path("state")
+            / "weekly_calendar.json"
         )
 
         if not state_file.exists():
             self.console.step(
-                "No weekly calendar state file found. "
-                "Nothing to update."
+                "No weekly calendar state "
+                "file found. Nothing to update."
             )
             return
 
-        state_data = json.loads(
-            state_file.read_text(
-                encoding="utf-8"
+        try:
+            state_data = json.loads(
+                state_file.read_text(
+                    encoding="utf-8"
+                )
             )
-        )
 
-        message_id = state_data.get("message_id")
+        except (
+            json.JSONDecodeError,
+            OSError,
+        ):
+            self.console.step(
+                "Weekly calendar state file "
+                "could not be read."
+            )
+            return
+
+        message_id = state_data.get(
+            "message_id"
+        )
 
         if not message_id:
             self.console.step(
-                "No weekly calendar message ID found. "
-                "Nothing to update."
+                "No weekly calendar message "
+                "ID found. Nothing to update."
             )
             return
 
-        from .alerts.notifiers import NotifierFactory
-
-        notifier = NotifierFactory(alert_options)
+        notifier = NotifierFactory(
+            alert_options
+        )
 
         notifier.edit_discord_message(
             "discord_main",
@@ -301,7 +474,8 @@ class WeeklyCalendarService:
         )
 
         state_data["updated_at"] = (
-            self.malaysia_now().isoformat()
+            self.malaysia_now()
+            .isoformat()
         )
 
         state_file.write_text(
@@ -313,7 +487,8 @@ class WeeklyCalendarService:
         )
 
         self.console.success(
-            "Weekly calendar Discord message updated"
+            "Weekly calendar Discord "
+            "message updated"
         )
 
     def run(
@@ -323,11 +498,15 @@ class WeeklyCalendarService:
         allowed_impacts: list[str],
         alert_options,
     ) -> int:
-        monday, friday = self.get_week_dates()
+        monday, friday = (
+            self.get_week_dates()
+        )
 
-        month_selectors = self.get_month_selectors(
-            monday,
-            friday,
+        month_selectors = (
+            self.get_month_selectors(
+                monday,
+                friday,
+            )
         )
 
         records = self.scrape_week(
