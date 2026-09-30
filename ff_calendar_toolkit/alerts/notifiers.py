@@ -25,23 +25,39 @@ class NotifierFactory:
     def connector_ids(self) -> list[str]:
         return sorted(self.connector_map)
 
-    def send_raw(self, connector_id: str, message: str) -> str | None:
-        connector = self.connector_map.get(connector_id)
+    def send_raw(
+        self,
+        connector_id: str,
+        message: str,
+    ) -> str | None:
+
+        connector = self.connector_map.get(
+            connector_id
+        )
 
         if connector is None:
             raise NotificationError(
-                f"Connector '{connector_id}' is not configured or enabled"
+                f"Connector '{connector_id}' "
+                f"is not configured or enabled"
             )
 
         if connector.connector_type == "discord":
-            return self._send_discord(connector, message)
+            return self._send_discord(
+                connector,
+                message,
+            )
 
         elif connector.connector_type == "telegram":
-            self._send_telegram(connector, message)
+            self._send_telegram(
+                connector,
+                message,
+            )
 
         elif connector.connector_type == "webhook":
             url = _required_env(
-                connector.settings.get("url_env")
+                connector.settings.get(
+                    "url_env"
+                )
             )
 
             headers = {}
@@ -55,8 +71,10 @@ class NotifierFactory:
             )
 
             if header_name and header_env:
-                headers[str(header_name)] = _required_env(
-                    header_env
+                headers[str(header_name)] = (
+                    _required_env(
+                        header_env
+                    )
                 )
 
             _post_json(
@@ -71,6 +89,8 @@ class NotifierFactory:
                 f"'{connector.connector_type}'"
             )
 
+        return None
+
     def send(
         self,
         connector_id: str,
@@ -78,11 +98,14 @@ class NotifierFactory:
         event: AlertEvent,
     ) -> None:
 
-        connector = self.connector_map.get(connector_id)
+        connector = self.connector_map.get(
+            connector_id
+        )
 
         if connector is None:
             raise NotificationError(
-                f"Connector '{connector_id}' is not configured or enabled"
+                f"Connector '{connector_id}' "
+                f"is not configured or enabled"
             )
 
         message = render_message(
@@ -105,8 +128,10 @@ class NotifierFactory:
                 return
 
             except NotificationError:
-
-                if attempt == self.options.retry_attempts:
+                if (
+                    attempt
+                    == self.options.retry_attempts
+                ):
                     raise
 
                 time.sleep(
@@ -163,22 +188,23 @@ class NotifierFactory:
         )
 
         if "?" in webhook_url:
-            webhook_url = (
+            send_url = (
                 f"{webhook_url}&wait=true"
             )
         else:
-            webhook_url = (
+            send_url = (
                 f"{webhook_url}?wait=true"
             )
 
         response = _post_json(
-            webhook_url,
+            send_url,
             {"content": message},
         )
 
         if not response:
             raise NotificationError(
-                "Discord did not return a message ID"
+                "Discord did not return "
+                "a message ID"
             )
 
         try:
@@ -186,14 +212,16 @@ class NotifierFactory:
 
         except json.JSONDecodeError as exc:
             raise NotificationError(
-                "Discord returned an invalid response"
+                "Discord returned an "
+                "invalid response"
             ) from exc
 
         message_id = data.get("id")
 
         if not message_id:
             raise NotificationError(
-                "Discord response did not contain a message ID"
+                "Discord response did not "
+                "contain a message ID"
             )
 
         return str(message_id)
@@ -211,12 +239,14 @@ class NotifierFactory:
 
         if connector is None:
             raise NotificationError(
-                f"Connector '{connector_id}' is not configured or enabled"
+                f"Connector '{connector_id}' "
+                f"is not configured or enabled"
             )
 
         if connector.connector_type != "discord":
             raise NotificationError(
-                f"Connector '{connector_id}' is not a Discord connector"
+                f"Connector '{connector_id}' "
+                f"is not a Discord connector"
             )
 
         webhook_url = _required_env(
@@ -226,12 +256,57 @@ class NotifierFactory:
         )
 
         edit_url = (
-            f"{webhook_url}/messages/{message_id}"
+            f"{webhook_url}/messages/"
+            f"{message_id}"
         )
 
         _patch_json(
             edit_url,
             {"content": message},
+        )
+
+    def delete_discord_message(
+        self,
+        connector_id: str,
+        message_id: str,
+    ) -> None:
+
+        connector = self.connector_map.get(
+            connector_id
+        )
+
+        if connector is None:
+            raise NotificationError(
+                f"Connector '{connector_id}' "
+                f"is not configured or enabled"
+            )
+
+        if connector.connector_type != "discord":
+            raise NotificationError(
+                f"Connector '{connector_id}' "
+                f"is not a Discord connector"
+            )
+
+        webhook_url = _required_env(
+            connector.settings.get(
+                "webhook_url_env"
+            )
+        )
+
+        delete_url = (
+            f"{webhook_url}/messages/"
+            f"{message_id}"
+        )
+
+        _perform_delete_request(
+            delete_url,
+            {
+                "User-Agent": (
+                    "DiscordBot "
+                    "(forex_factory_calendar_"
+                    "news_scraper, 1.0)"
+                )
+            },
         )
 
     def _send_telegram(
@@ -294,8 +369,10 @@ class NotifierFactory:
         )
 
         if header_name and header_env:
-            headers[str(header_name)] = _required_env(
-                header_env
+            headers[str(header_name)] = (
+                _required_env(
+                    header_env
+                )
             )
 
         payload = {
@@ -305,7 +382,9 @@ class NotifierFactory:
                 "name": rule.name,
             },
             "event": event.payload,
-            "event_time": event.event_time.isoformat(),
+            "event_time": (
+                event.event_time.isoformat()
+            ),
         }
 
         _post_json(
@@ -372,6 +451,7 @@ def render_message(
             "forecast",
             "",
         )
+        or ""
     ).strip()
 
     previous = str(
@@ -379,6 +459,7 @@ def render_message(
             "previous",
             "",
         )
+        or ""
     ).strip()
 
     lines = [
@@ -403,6 +484,7 @@ def render_message(
         )
 
     return "\n".join(lines)
+
 
 def render_actual_message(
     event: AlertEvent,
@@ -459,6 +541,7 @@ def render_actual_message(
             "actual",
             "",
         )
+        or ""
     ).strip()
 
     forecast = str(
@@ -466,6 +549,7 @@ def render_actual_message(
             "forecast",
             "",
         )
+        or ""
     ).strip()
 
     previous = str(
@@ -473,6 +557,7 @@ def render_actual_message(
             "previous",
             "",
         )
+        or ""
     ).strip()
 
     lines = [
@@ -501,6 +586,7 @@ def render_actual_message(
         )
 
     return "\n".join(lines)
+
 
 def _required_env(env_name) -> str:
 
@@ -600,23 +686,37 @@ def _post_form(
     )
 
 
+def _safe_url(
+    url: str,
+) -> str:
+
+    parsed = parse.urlparse(
+        url
+    )
+
+    if len(parsed.path) > 30:
+        path = (
+            parsed.path[:30]
+            + "…"
+        )
+    else:
+        path = parsed.path
+
+    return (
+        f"{parsed.scheme}://"
+        f"{parsed.netloc}"
+        f"{path}"
+    )
+
+
 def _perform_request(
     url: str,
     payload: bytes,
     headers: dict,
 ) -> str:
 
-    parsed = parse.urlparse(url)
-
-    safe_url = (
-        f"{parsed.scheme}://"
-        f"{parsed.netloc}"
-        f"{parsed.path[:30]}…"
-        if len(parsed.path) > 30
-        else
-        f"{parsed.scheme}://"
-        f"{parsed.netloc}"
-        f"{parsed.path}"
+    safe_url = _safe_url(
+        url
     )
 
     req = request.Request(
@@ -627,7 +727,6 @@ def _perform_request(
     )
 
     try:
-
         with request.urlopen(
             req,
             timeout=10,
@@ -639,25 +738,28 @@ def _perform_request(
                 200,
             )
 
-            response_body = response.read().decode(
-                "utf-8",
-                errors="replace",
+            response_body = (
+                response.read().decode(
+                    "utf-8",
+                    errors="replace",
+                )
             )
 
             if status >= 400:
                 raise NotificationError(
-                    f"HTTP {status} from {safe_url}"
+                    f"HTTP {status} "
+                    f"from {safe_url}"
                 )
 
             return response_body
 
     except HTTPError as exc:
-
         try:
             body = exc.read().decode(
                 "utf-8",
                 errors="replace",
             )
+
         except Exception:
             body = "<unreadable>"
 
@@ -668,10 +770,9 @@ def _perform_request(
         ) from exc
 
     except URLError as exc:
-
         raise NotificationError(
-            f"Connection error to {safe_url} "
-            f"— {exc.reason}"
+            f"Connection error to "
+            f"{safe_url} — {exc.reason}"
         ) from exc
 
 
@@ -681,17 +782,8 @@ def _perform_patch_request(
     headers: dict,
 ) -> str:
 
-    parsed = parse.urlparse(url)
-
-    safe_url = (
-        f"{parsed.scheme}://"
-        f"{parsed.netloc}"
-        f"{parsed.path[:30]}…"
-        if len(parsed.path) > 30
-        else
-        f"{parsed.scheme}://"
-        f"{parsed.netloc}"
-        f"{parsed.path}"
+    safe_url = _safe_url(
+        url
     )
 
     req = request.Request(
@@ -702,7 +794,6 @@ def _perform_patch_request(
     )
 
     try:
-
         with request.urlopen(
             req,
             timeout=10,
@@ -714,25 +805,28 @@ def _perform_patch_request(
                 200,
             )
 
-            response_body = response.read().decode(
-                "utf-8",
-                errors="replace",
+            response_body = (
+                response.read().decode(
+                    "utf-8",
+                    errors="replace",
+                )
             )
 
             if status >= 400:
                 raise NotificationError(
-                    f"HTTP {status} from {safe_url}"
+                    f"HTTP {status} "
+                    f"from {safe_url}"
                 )
 
             return response_body
 
     except HTTPError as exc:
-
         try:
             body = exc.read().decode(
                 "utf-8",
                 errors="replace",
             )
+
         except Exception:
             body = "<unreadable>"
 
@@ -743,8 +837,68 @@ def _perform_patch_request(
         ) from exc
 
     except URLError as exc:
+        raise NotificationError(
+            f"Connection error to "
+            f"{safe_url} — {exc.reason}"
+        ) from exc
+
+
+def _perform_delete_request(
+    url: str,
+    headers: dict,
+) -> None:
+
+    safe_url = _safe_url(
+        url
+    )
+
+    req = request.Request(
+        url,
+        headers=headers,
+        method="DELETE",
+    )
+
+    try:
+        with request.urlopen(
+            req,
+            timeout=10,
+        ) as response:
+
+            status = getattr(
+                response,
+                "status",
+                204,
+            )
+
+            if status >= 400:
+                raise NotificationError(
+                    f"HTTP {status} "
+                    f"from {safe_url}"
+                )
+
+    except HTTPError as exc:
+        # If the Discord message was already
+        # deleted, there is nothing left to clean up.
+        if exc.code == 404:
+            return
+
+        try:
+            body = exc.read().decode(
+                "utf-8",
+                errors="replace",
+            )
+
+        except Exception:
+            body = "<unreadable>"
 
         raise NotificationError(
-            f"Connection error to {safe_url} "
-            f"— {exc.reason}"
+            f"HTTP {exc.code} {exc.reason} "
+            f"from {safe_url} — "
+            f"response body: {body}"
+        ) from exc
+
+    except URLError as exc:
+        raise NotificationError(
+            f"Connection error to "
+            f"{safe_url} — {exc.reason}"
         ) from exc
