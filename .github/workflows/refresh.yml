@@ -1,21 +1,21 @@
-name: Forex Factory Fast Alerts
+name: Forex Factory Refresh
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "2,12,22,32,42,52 * * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: forex-factory-fast-alerts
+  group: forex-factory-refresh
   cancel-in-progress: false
 
 jobs:
-  fast-alerts:
+  refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
 
     steps:
       - name: Check out repository
@@ -34,32 +34,35 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
 
-      - name: Run fast 10-minute alert checker
+      - name: Refresh Forex Factory data
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
-          python -m ff_calendar_toolkit.cli alerts-fast
+          python -m ff_calendar_toolkit.cli alerts-check
 
-      - name: Save fast alert state
+      - name: Save refreshed state and cache
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add state/alerts/fast_alert_state.json
+          git add \
+            state/alerts/alert_state.json \
+            state/upcoming_events.json \
+            state/weekly_calendar.json
 
           if git diff --cached --quiet; then
-            echo "No fast alert state changes to save."
+            echo "No refresh state changes to save."
             exit 0
           fi
 
-          git commit -m "Update fast alert state"
+          git commit -m "Update Forex Factory refresh state"
 
           git pull --rebase origin main
 
           for attempt in 1 2 3
           do
             if git push origin HEAD:main; then
-              echo "Fast alert state saved."
+              echo "Refresh state saved."
               exit 0
             fi
 
@@ -68,5 +71,5 @@ jobs:
             sleep 2
           done
 
-          echo "Could not save fast alert state after retries."
+          echo "Could not save refresh state after retries."
           exit 1

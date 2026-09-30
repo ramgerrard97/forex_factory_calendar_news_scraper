@@ -14,7 +14,9 @@ news/
 state/*
 !state/alerts/
 !state/alerts/alert_state.json
+!state/alerts/fast_alert_state.json
 !state/weekly_calendar.json
+!state/upcoming_events.json
 
 # Local backups
 *.backup
