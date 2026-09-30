@@ -1,4 +1,47 @@
 {
-  "sent": {},
+  "sent": {
+    "economic-news-alert|30/09/2026|15:30|USD|Core PCE Price Index m/m|red|2026-09-30T15:20:00+08:00": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Core PCE Price Index m/m",
+        "currency": "USD",
+        "impact": "red",
+        "trigger_at": "2026-09-30T15:20:00+08:00",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-30T07:24:19.310593+00:00"
+    },
+    "economic-news-alert|30/09/2026|15:30|USD|Final GDP q/q|red|2026-09-30T15:20:00+08:00": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Final GDP q/q",
+        "currency": "USD",
+        "impact": "red",
+        "trigger_at": "2026-09-30T15:20:00+08:00",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-30T07:24:19.807108+00:00"
+    },
+    "economic-news-alert|30/09/2026|15:30|USD|Final GDP Price Index q/q|orange|2026-09-30T15:20:00+08:00": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Final GDP Price Index q/q",
+        "currency": "USD",
+        "impact": "orange",
+        "trigger_at": "2026-09-30T15:20:00+08:00",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-09-30T07:24:20.059410+00:00"
+    }
+  },
   "failures": {}
 }
