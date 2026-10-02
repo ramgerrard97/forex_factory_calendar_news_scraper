@@ -41,6 +41,34 @@
         "connector": "discord_main"
       },
       "sent_at": "2026-09-30T07:24:20.059410+00:00"
+    },
+    "economic-news-alert|02/10/2026|17:00|EUR|CPI Flash Estimate y/y|orange|2026-10-02T16:50:00+08:00": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "CPI Flash Estimate y/y",
+        "currency": "EUR",
+        "impact": "orange",
+        "trigger_at": "2026-10-02T16:50:00+08:00",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-10-02T08:54:57.873567+00:00"
+    },
+    "economic-news-alert|02/10/2026|17:00|EUR|Core CPI Flash Estimate y/y|orange|2026-10-02T16:50:00+08:00": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Core CPI Flash Estimate y/y",
+        "currency": "EUR",
+        "impact": "orange",
+        "trigger_at": "2026-10-02T16:50:00+08:00",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-10-02T08:54:58.029060+00:00"
     }
   },
   "failures": {}
