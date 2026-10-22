@@ -69,6 +69,20 @@
         "connector": "discord_main"
       },
       "sent_at": "2026-10-02T08:54:58.029060+00:00"
+    },
+    "economic-news-alert|22/10/2026|20:30|USD|Unemployment Claims|orange|2026-10-22T20:20:00+08:00": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Unemployment Claims",
+        "currency": "USD",
+        "impact": "orange",
+        "trigger_at": "2026-10-22T20:20:00+08:00",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-10-22T12:24:22.325822+00:00"
     }
   },
   "failures": {}
