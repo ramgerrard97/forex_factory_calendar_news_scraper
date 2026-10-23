@@ -601,6 +601,62 @@
         "connector": "discord_main"
       },
       "sent_at": "2026-10-22T12:32:44.749346+00:00"
+    },
+    "actual|23/10/2026|15:15|EUR|French Flash Manufacturing PMI|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "French Flash Manufacturing PMI",
+        "currency": "EUR",
+        "impact": "orange",
+        "actual": "49.3",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-10-23T07:33:43.688080+00:00"
+    },
+    "actual|23/10/2026|15:15|EUR|French Flash Services PMI|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "French Flash Services PMI",
+        "currency": "EUR",
+        "impact": "orange",
+        "actual": "48.4",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-10-23T07:33:43.914223+00:00"
+    },
+    "actual|23/10/2026|15:30|EUR|German Flash Manufacturing PMI|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "German Flash Manufacturing PMI",
+        "currency": "EUR",
+        "impact": "orange",
+        "actual": "54.2",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-10-23T07:33:44.131720+00:00"
+    },
+    "actual|23/10/2026|15:30|EUR|German Flash Services PMI|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "German Flash Services PMI",
+        "currency": "EUR",
+        "impact": "orange",
+        "actual": "51.7",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-10-23T07:33:44.424013+00:00"
     }
   },
   "failures": {
