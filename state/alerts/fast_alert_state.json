@@ -83,6 +83,20 @@
         "connector": "discord_main"
       },
       "sent_at": "2026-10-22T12:24:22.325822+00:00"
+    },
+    "economic-news-alert|30/10/2026|07:30|JPY|Tokyo Core CPI y/y|orange|2026-10-30T07:20:00+08:00": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Tokyo Core CPI y/y",
+        "currency": "JPY",
+        "impact": "orange",
+        "trigger_at": "2026-10-30T07:20:00+08:00",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-10-29T23:29:02.242212+00:00"
     }
   },
   "failures": {}
