@@ -657,6 +657,20 @@
         "connector": "discord_main"
       },
       "sent_at": "2026-10-23T07:33:44.424013+00:00"
+    },
+    "actual|03/11/2026|11:30|AUD|Cash Rate|red": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Cash Rate",
+        "currency": "AUD",
+        "impact": "red",
+        "actual": "4.85%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-11-03T03:48:54.128383+00:00"
     }
   },
   "failures": {
