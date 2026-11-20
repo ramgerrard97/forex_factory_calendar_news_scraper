@@ -671,6 +671,20 @@
         "connector": "discord_main"
       },
       "sent_at": "2026-11-03T03:48:54.128383+00:00"
+    },
+    "actual|20/11/2026|15:00|GBP|Retail Sales m/m|orange": {
+      "connectors": [
+        "discord_main"
+      ],
+      "preview": {
+        "rule": "economic-news-alert",
+        "event": "Retail Sales m/m",
+        "currency": "GBP",
+        "impact": "orange",
+        "actual": "0.7%",
+        "connector": "discord_main"
+      },
+      "sent_at": "2026-11-20T07:01:15.056771+00:00"
     }
   },
   "failures": {
